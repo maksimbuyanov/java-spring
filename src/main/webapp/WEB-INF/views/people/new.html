@@ -14,14 +14,43 @@
 </head>
 <body>
 
-<form th:method="post" th:action="@{/people}" th:object="${person}">
+<form th:method="post"
+      th:action="@{/people}"
+      th:object="${person}"
+      style="display: flex; flex-direction: column; align-items: start; justify-content: start; margin-top: 20px; gap: 20px;"
+>
     <label>Name
         <br>
-    <input type="text"
-           th:field="*{name}"
-           >
+        <input type="text"
+               th:field="*{name}"
+        >
+        <br>
+        <span style="color: red"
+              th:if="${#fields.hasErrors('name')}"
+              th:errors="*{name}"></span>
     </label>
-    <input type="submit" value="Create">
+    <label>Age
+        <br>
+        <input type="number"
+               th:field="*{age}"
+        >
+        <br>
+        <span style="color: red"
+              th:if="${#fields.hasErrors('age')}"
+              th:errors="*{age}"></span>
+    </label>
+    <label>Email
+        <br>
+        <input type="text"
+               th:field="*{email}"
+        >
+        <br>
+        <span style="color: red"
+              th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}"></span>
+    </label>
+    <input type="submit"
+           value="Create">
 
 </form>
 

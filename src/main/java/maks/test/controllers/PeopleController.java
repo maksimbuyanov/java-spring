@@ -1,10 +1,12 @@
 package maks.test.controllers;
 
+import jakarta.validation.Valid;
 import maks.test.dao.PersonDAO;
 import maks.test.models.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -28,12 +30,17 @@ public class PeopleController {
     }
 
     @GetMapping("/new")
-    public String newPerson (@ModelAttribute("person") Person person) {
+    public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
     @PostMapping()
-    public String createPerson(@ModelAttribute("person") Person person) {
+    public String createPerson(@ModelAttribute("person") @Valid Person person,
+                               BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) return "people/new";
+
+
         personDAO.save(person);
         return "redirect:/people";
     }
@@ -45,7 +52,10 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String updatePerson(@PathVariable("id") int id, @ModelAttribute("person") Person person) {
+    public String updatePerson(@PathVariable("id") int id,
+                               @ModelAttribute("person") @Valid Person person,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return "people/edit";
         personDAO.update(id, person);
         return "redirect:/people";
     }
