@@ -21,27 +21,21 @@ public class PersonDAO {
     }
 
     public List<Person> index() {
-        return template.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
+        List<Person> people = template.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
+        people.forEach(System.out::println);
+        return people;
     }
 
     public Person show(int id) {
-
-        return template.query("SELECT * FROM person WHERE id =?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
-                .stream().findFirst().get();
-
+        return template.query("SELECT * FROM person WHERE id =?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class)).stream().findFirst().get();
     }
 
     public void save(Person person) {
-        template.update(
-                "INSERT INTO person (name, age, email, id) VALUES (?,?,?,?)",
-                person.getName(), person.getAge(), person.getEmail(), person.getId());
-
+        template.update("INSERT INTO person (name, age, email) VALUES (?,?,?)", person.getName(), person.getAge(), person.getEmail());
     }
 
     public void update(int id, Person person) {
-
-        template.update("UPDATE person SET name =?, age =?, email =? WHERE id =?",
-                person.getName(), person.getAge(), person.getEmail(), id);
+        template.update("UPDATE person SET name =?, age =?, email =? WHERE id =?", person.getName(), person.getAge(), person.getEmail(), id);
     }
 
     public void delete(int id) {
